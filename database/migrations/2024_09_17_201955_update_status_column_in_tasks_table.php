@@ -22,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            // Volte a coluna 'status' para enum, se necessário
             $table->enum('status', ['pendente', 'em_andamento', 'completada'])->default('pendente')->change();
         });
     }
