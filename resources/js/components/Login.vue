@@ -53,14 +53,16 @@
                     },
                     success: (response) => {
                         if (response.success) {
-                            alert("sucesso");
+                            //alert("sucesso");
+                            //this.$router.push("/");
+                            this.$router.push('/home');
                             // Redireciona para a página desejada após o login bem-sucedido
                             //window.location.href = response.redirect;
                         }
                     },
                     error: (error) => {
-                        alert("erro");
-                        console.log(error);
+                        //alert("erro");
+                        //console.log(error);
                         // Mostra a mensagem de erro caso o login falhe
                         this.errorMessage = error.responseJSON.message || 'Erro ao realizar login.';
                     }
