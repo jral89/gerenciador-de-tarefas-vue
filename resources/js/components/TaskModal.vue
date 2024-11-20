@@ -79,20 +79,36 @@
   </template>
   
   <script>
+  $.get('/csrf-token', function(response) {
+      $('meta[name="csrf-token"]').attr('content', response.csrfToken);
+  });
   export default {
     data() {
       return {
-        isVisible: false,
-        categorias: [], // Aqui você pode carregar os dados via API
-        form: {
-          titulo: "",
-          descricao: "",
-          status: "pendente",
+          isVisible: false,
+          form: {
+            titulo: '',
+            descricao: '',
+            status: '',
+            categorias: [], // IDs das categorias selecionadas
+          },
           categorias: [],
-        },
-      };
+            };
     },
     methods: {
+      loadCategorias() {
+        $.ajax({
+            url: "/categorias", // URL definida na rota Laravel
+            method: "GET",
+            success: (response) => {
+              console.log(response);
+              this.categorias = response; // Atualiza a lista com os dados recebidos
+            },
+            error: (error) => {
+              console.error("Erro ao carregar categorias:", error);
+            }
+        });
+      },
       open() {
         this.isVisible = true;
       },
@@ -100,10 +116,27 @@
         this.isVisible = false;
       },
       submitForm() {
-        // Lógica para envio do formulário
-        console.log(this.form);
-        this.close();
+        console.log($('meta[name="csrf-token"]').attr('content'));
+        $.ajax({
+            url: "/tarefas/store", // URL definida na rota Laravel
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Token no cabeçalho
+            },
+            data: this.form,
+            success: (response) => {
+              console.log(response);
+              alert('cadastrado'); // Atualiza a lista com os dados recebidos
+            },
+            error: (error) => {
+              console.error("Erro ao carregar categorias:", error);
+            }
+        });
+        //this.close();
       },
+    },
+    mounted() {
+      this.loadCategorias(); // Chama a função assim que o componente é montado
     },
   };
   </script>

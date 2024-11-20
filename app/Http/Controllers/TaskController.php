@@ -16,9 +16,15 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks', 'categorias'));
     }
 
+    public function getCategorias()
+    {
+        $categorias = Category::all();
+        return response()->json($categorias);
+    }
+
     public function store(Request $request)
     {
-
+       // dd('chegou no store');
         $validated = $request->validate([
             'titulo' => 'required|string|min:3',
             'descricao' => 'required|string|min:5',
