@@ -12,8 +12,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class, // Validação do tamanho do POST
-        \App\Http\Middleware\VerifyCsrfToken::class, // Verificação de CSRF
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \App\Http\Middleware\VerifyCsrfToken::class,
     ];
 
     /**
@@ -26,7 +26,7 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,  // Verificação CSRF
+            \App\Http\Middleware\VerifyCsrfToken::class,
         ],
 
         'api' => [

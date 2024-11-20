@@ -2,7 +2,7 @@
     <div class="container-fluid px-5">
       <h2 class="mt-5">Gerenciador de Tarefas</h2>
       <div>
-        <!-- Botão de Logout -->
+        
         <button @click="logout" class="btn btn-danger">Sair</button>
       </div>
       <button
@@ -57,7 +57,7 @@
         </tbody>
       </table>
   
-      <!-- Modais -->
+      
       <TaskModal ref="taskModal" />
       <EditTaskModal ref="editTaskModal" />
     </div>
@@ -71,17 +71,16 @@
     components: { TaskModal, EditTaskModal },
     data() {
       return {
-        tasks: [], // Aqui você pode carregar os dados via API
+        tasks: [], 
       };
     },
     methods: {
       loadTarefas() {
         $.ajax({
-            url: "/tarefas", // URL definida na rota Laravel
+            url: "/tarefas", 
             method: "GET",
             success: (response) => {
-              console.log(response);
-              this.tasks = response; // Atualiza a lista com os dados recebidos
+              this.tasks = response; 
             },
             error: (error) => {
               console.error("Erro ao carregar categorias:", error);
@@ -89,17 +88,15 @@
         });
       },
       logout() {
-      // Usando jQuery AJAX para enviar o logout
+        
         $.ajax({
           url: '/logout',
           method: 'POST',
           headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Enviar o token CSRF
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 
           },
           success: (response) => {
-            // Aqui você pode redirecionar ou atualizar a interface
-            console.log('Usuário deslogado com sucesso');
-            window.location.href = '/login'; // Redireciona para a página inicial após logout
+            window.location.href = '/login'; 
           },
           error: (error) => {
             console.error('Erro ao fazer logout', error);
@@ -110,15 +107,28 @@
         this.$refs.taskModal.open();
       },
       confirmDelete(taskId) {
-        // Lógica para confirmar exclusão
-        console.log("Excluir tarefa", taskId);
+        $.ajax({
+            url: "/tarefas-destroy", 
+            method: "DELETE",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+            },
+            data: { id: taskId },
+            success: (response) => {
+              alert('atualizado');
+              window.location.href = '/home'; 
+            },
+            error: (error) => {
+              console.error("Erro ao atualizar:", error);
+            }
+        });
       },
       editTask(task) {
         this.$refs.editTaskModal.open(task);
       },
     },
     mounted() {
-      this.loadTarefas(); // Chama a função assim que o componente é montado
+      this.loadTarefas(); 
     },
   };
   </script>
