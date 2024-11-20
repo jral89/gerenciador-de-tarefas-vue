@@ -1,17 +1,16 @@
 <template>
     <div class="container-fluid px-5">
       <h2 class="mt-5">Gerenciador de Tarefas</h2>
-      <div>
-        
+      <div>        
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="showTaskModal"
+        >
+          Adicionar Tarefa
+        </button>
         <button @click="logout" class="btn btn-danger">Sair</button>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="showTaskModal"
-      >
-        Adicionar Tarefa
-      </button>
       <h2 class="mt-5">Tarefas cadastradas</h2>
       <table id="tableTarefas" class="table table-striped">
         <thead>
@@ -81,14 +80,30 @@
             method: "GET",
             success: (response) => {
               this.tasks = response; 
+              this.$nextTick(() => {
+                const table = $('#tableTarefas').DataTable();
+                table.destroy(); // Destrói a instância atual
+                this.initDataTable(); // Recria a tabela
+            });
             },
             error: (error) => {
-              console.error("Erro ao carregar categorias:", error);
+              console.error("Erro ao carregar tarefas:", error);
             }
         });
       },
-      logout() {
-        
+      initDataTable() {
+        this.$nextTick(() => {
+          $('#tableTarefas').DataTable({
+            language: {
+              url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/pt-BR.json"
+            },
+            destroy: true,
+            pageLength: 10,
+            responsive: true
+          });
+        });
+      },
+      logout() {        
         $.ajax({
           url: '/logout',
           method: 'POST',

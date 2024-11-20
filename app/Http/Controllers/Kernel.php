@@ -41,6 +41,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        // Middlewares específicos para cada rota podem ser definidos aqui
+        
     ];
 }

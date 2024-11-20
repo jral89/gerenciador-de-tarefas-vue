@@ -21,6 +21,5 @@ Route::get('/categorias', [TaskController::class, 'getCategorias'])->name('tasks
 Route::get('/tarefas', [TaskController::class, 'index'])->name('tarefas.index');
 Route::post('/tarefas/store', [TaskController::class, 'store'])->name('tarefas.store');
 Route::delete('/tarefas-destroy', [TaskController::class, 'destroy'])->name('tarefas.destroy');
-Route::get('/show/{id}', [TaskController::class, 'show'])->name('tasks.show');
 Route::put('/tarefas-update', [TaskController::class, 'update'])->name('tarefas.update');
 
