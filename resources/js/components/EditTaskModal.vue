@@ -143,8 +143,8 @@ export default {
             },
             data: this.form,
             success: (response) => {
-              alert('atualizado');
-              window.location.href = '/home'; 
+              this.close();
+              this.resetForm();
             },
             error: (error) => {
               console.error("Erro ao atualizar:", error);
@@ -152,6 +152,9 @@ export default {
         });
         
       this.close();
+    },
+    resetForm() {
+      this.form = { title: '', description: '', status: '', categorias: [] };
     },
   },
 };
