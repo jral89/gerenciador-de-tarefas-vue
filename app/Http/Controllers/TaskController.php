@@ -19,8 +19,7 @@ class TaskController extends Controller
         })
         ->get();
         
-        return response()->json($tarefas);
-        
+        return response()->json($tarefas);        
  
     }
 

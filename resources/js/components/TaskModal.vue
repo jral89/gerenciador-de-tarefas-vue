@@ -2,6 +2,7 @@
   <div>
     <div
       class="modal fade show d-block"
+      id="modalTarefa"
       tabindex="-1"
       aria-labelledby="taskModalLabel"
       role="dialog"
@@ -123,12 +124,17 @@
             },
             data: this.form,
             success: (response) => {
-              window.location.href = '/home'; 
+              this.close();
+              this.resetForm();
+              
             },
             error: (error) => {
               console.error("Erro ao carregar categorias:", error);
             }
         });
+      }, 
+      resetForm() {
+        this.form = { title: '', description: '', status: '', categorias: [] };
       },
     },
     mounted() {
