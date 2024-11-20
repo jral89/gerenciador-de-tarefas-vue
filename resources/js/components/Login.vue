@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 70vh;">
+    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 100vh;">
         <div class="card p-4 shadow" style="width: 400px;">
             <h2 class="text-center mb-4">Login</h2>
             <form @submit.prevent="login">
@@ -32,7 +32,9 @@
 </template>
 
 <script>
-
+    $.get('/csrf-token', function(response) {
+        $('meta[name="csrf-token"]').attr('content', response.csrfToken);
+    });
     export default{
         data(){
             return {
@@ -44,26 +46,19 @@
         methods: {
             login() {
                 $.ajax({
-                    url: '/login_auth', // URL da sua rota de login no Laravel
+                    url: '/login_auth',
                     method: 'POST',
                     data: {
                         email: this.email,
                         password: this.password,
-                        _token: $('meta[name="csrf-token"]').attr('content'), // CSRF token para proteger a requisição
+                        _token: $('meta[name="csrf-token"]').attr('content'),
                     },
                     success: (response) => {
                         if (response.success) {
-                            //alert("sucesso");
-                            //this.$router.push("/");
                             this.$router.push('/home');
-                            // Redireciona para a página desejada após o login bem-sucedido
-                            //window.location.href = response.redirect;
                         }
                     },
                     error: (error) => {
-                        //alert("erro");
-                        //console.log(error);
-                        // Mostra a mensagem de erro caso o login falhe
                         this.errorMessage = error.responseJSON.message || 'Erro ao realizar login.';
                     }
                 });

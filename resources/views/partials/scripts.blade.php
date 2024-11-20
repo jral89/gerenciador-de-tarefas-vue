@@ -172,7 +172,6 @@
                 Swal.fire('Sucesso!', 'Tarefa excluída com sucesso!', 'success');
         
                 $('#tableTarefas').find('tr').filter(function() {
-                    console.log('funcionou');
                     return $(this).find('td').first().text() == taskId;
                 }).remove();
             },

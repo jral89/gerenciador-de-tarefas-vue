@@ -4,18 +4,18 @@ const routes = [
     {
         path: '/home',
         name: 'home',
-        component: () => import('./components/Home.vue'), // Componente de login
+        component: () => import('./components/Home.vue'),
     },
     {
         path: '/login',
         name: 'login',
-        component: () => import('./components/Login.vue'), // Componente de login
+        component: () => import('./components/Login.vue'), 
     },
     {
         path: '/',
-        redirect: '/login', // Redireciona para login como rota padrão
+        redirect: '/login', 
     },
-    // outras rotas do Vue aqui
+    
 ];
 
 const router = createRouter({
