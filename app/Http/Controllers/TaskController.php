@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::with('categories')->get();
+        $tarefas = Task::with('categories')->get();
         $categorias = Category::all();
         
-        return view('tasks.index', compact('tasks', 'categorias'));
+        //return view('tarefas.index', compact('tarefas'));
+        return response()->json($tarefas);
+        
+        // return view('tasks.index', compact('tasks', 'categorias'));
     }
 
     public function getCategorias()
@@ -24,7 +28,8 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-       // dd('chegou no store');
+        $user = Auth::user();
+
         $validated = $request->validate([
             'titulo' => 'required|string|min:3',
             'descricao' => 'required|string|min:5',
@@ -36,6 +41,7 @@ class TaskController extends Controller
         $task->title = $validated['titulo'];
         $task->description = $validated['descricao'];
         $task->status = $validated['status'];
+        $task->user_id = $user->id;
         $task->save();
     
         if (isset($validated['categorias'])) {

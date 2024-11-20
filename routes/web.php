@@ -13,7 +13,7 @@ Route::post('/login_auth', [AuthController::class, 'login'])->name('login_auth')
 Route::get('/categorias', [TaskController::class, 'getCategorias'])->name('tasks.categorias');
 
 
-Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::get('/tarefas', [TaskController::class, 'index'])->name('tarefas.index');
 Route::post('/tarefas/store', [TaskController::class, 'store'])->name('tarefas.store');
 Route::delete('/destroy/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 Route::get('/show/{id}', [TaskController::class, 'show'])->name('tasks.show');

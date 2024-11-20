@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid px-5">
-      <h2>Gerenciador de Tarefas</h2>
+      <h2 class="mt-5">Gerenciador de Tarefas</h2>
       <button
         type="button"
         class="btn btn-primary"
@@ -71,6 +71,19 @@
       };
     },
     methods: {
+      loadTarefas() {
+        $.ajax({
+            url: "/tarefas", // URL definida na rota Laravel
+            method: "GET",
+            success: (response) => {
+              console.log(response);
+              this.tasks = response; // Atualiza a lista com os dados recebidos
+            },
+            error: (error) => {
+              console.error("Erro ao carregar categorias:", error);
+            }
+        });
+      },
       showTaskModal() {
         this.$refs.taskModal.open();
       },
@@ -81,6 +94,9 @@
       editTask(task) {
         this.$refs.editTaskModal.open(task);
       },
+    },
+    mounted() {
+      this.loadTarefas(); // Chama a função assim que o componente é montado
     },
   };
   </script>
