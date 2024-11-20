@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 70vh;">
+    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 100vh;">
         <div class="card p-4 shadow" style="width: 400px;">
             <h2 class="text-center mb-4">Login</h2>
             <form @submit.prevent="login">

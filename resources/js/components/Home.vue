@@ -1,6 +1,10 @@
 <template>
     <div class="container-fluid px-5">
       <h2 class="mt-5">Gerenciador de Tarefas</h2>
+      <div>
+        <!-- Botão de Logout -->
+        <button @click="logout" class="btn btn-danger">Sair</button>
+      </div>
       <button
         type="button"
         class="btn btn-primary"
@@ -82,6 +86,24 @@
             error: (error) => {
               console.error("Erro ao carregar categorias:", error);
             }
+        });
+      },
+      logout() {
+      // Usando jQuery AJAX para enviar o logout
+        $.ajax({
+          url: '/logout',
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Enviar o token CSRF
+          },
+          success: (response) => {
+            // Aqui você pode redirecionar ou atualizar a interface
+            console.log('Usuário deslogado com sucesso');
+            window.location.href = '/login'; // Redireciona para a página inicial após logout
+          },
+          error: (error) => {
+            console.error('Erro ao fazer logout', error);
+          }
         });
       },
       showTaskModal() {

@@ -125,8 +125,7 @@
             },
             data: this.form,
             success: (response) => {
-              console.log(response);
-              alert('cadastrado'); // Atualiza a lista com os dados recebidos
+              window.location.href = '/home'; // Atualiza a lista com os dados recebidos
             },
             error: (error) => {
               console.error("Erro ao carregar categorias:", error);

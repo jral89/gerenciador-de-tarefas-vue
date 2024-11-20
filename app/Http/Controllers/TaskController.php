@@ -11,13 +11,17 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tarefas = Task::with('categories')->get();
-        $categorias = Category::all();
+        $user = Auth::user();
+        //dd($user->admin, $user->id);
+        $tarefas = Task::with('categories')
+        ->when($user->admin === '0', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->get();
         
-        //return view('tarefas.index', compact('tarefas'));
         return response()->json($tarefas);
         
-        // return view('tasks.index', compact('tasks', 'categorias'));
+ 
     }
 
     public function getCategorias()
@@ -29,7 +33,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
+        //dd($user);
         $validated = $request->validate([
             'titulo' => 'required|string|min:3',
             'descricao' => 'required|string|min:5',
@@ -42,6 +46,7 @@ class TaskController extends Controller
         $task->description = $validated['descricao'];
         $task->status = $validated['status'];
         $task->user_id = $user->id;
+        $task->admin = $user->admin;
         $task->save();
     
         if (isset($validated['categorias'])) {
