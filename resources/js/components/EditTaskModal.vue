@@ -143,15 +143,58 @@ export default {
             },
             data: this.form,
             success: (response) => {
-              alert('atualizado');
-              window.location.href = '/home'; 
+
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Tarefa atualizada!',
+                  text: 'A tarefa foi atualizada com sucesso.',
+                  showConfirmButton: true,
+                  timer: 1500
+              });
+
+              this.close();
+              this.resetForm();
+              const task = response.task; 
+              const table = $('#tableTarefas').DataTable();
+              const rowIndex = table.rows().indexes().filter((index) => {
+                return table.row(index).data()[0] == task.id;
+                })[0];
+
+                if (rowIndex !== undefined) {
+                    
+                    table.row(rowIndex).data([
+                        task.id, 
+                        task.title, 
+                        task.description, 
+                        task.status, 
+                        task.created_at, 
+                        task.updated_at, 
+                        task.categories.map(cat => cat.title).join(', '), 
+                        `
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${task.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        `
+                    ]).draw(false);
+                }
             },
             error: (error) => {
-              console.error("Erro ao atualizar:", error);
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Erro',
+                  text: 'Ocorreu um erro ao tentar atualizar a tarefa. Tente novamente.',
+                  confirmButtonText: 'Ok'
+              });
             }
         });
         
       this.close();
+    },
+    resetForm() {
+      this.form = { title: '', description: '', status: '', categorias: [] };
     },
   },
 };

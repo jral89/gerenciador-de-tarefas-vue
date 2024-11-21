@@ -82,12 +82,17 @@
               this.tasks = response; 
               this.$nextTick(() => {
                 const table = $('#tableTarefas').DataTable();
-                table.destroy(); // Destrói a instância atual
-                this.initDataTable(); // Recria a tabela
+                table.destroy();
+                this.initDataTable();
             });
             },
             error: (error) => {
-              console.error("Erro ao carregar tarefas:", error);
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Erro',
+                  text: 'Ocorreu um erro ao tentar carregar as tarefas. Tente novamente.',
+                  confirmButtonText: 'Ok'
+              });
             }
         });
       },
@@ -111,10 +116,23 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 
           },
           success: (response) => {
-            window.location.href = '/login'; 
-          },
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Logout realizado com sucesso!',
+                  text: 'Você será redirecionado para a página de login.',
+                  showConfirmButton: true,
+                  timer: 1500
+              }).then(() => {
+                  window.location.href = '/login'; 
+              });
+            },
           error: (error) => {
-            console.error('Erro ao fazer logout', error);
+            Swal.fire({
+                  icon: 'error',
+                  title: 'Erro',
+                  text: 'Ocorreu um erro ao tentar fazer logout. Tente novamente.',
+                  confirmButtonText: 'Ok'
+              });
           }
         });
       },
@@ -122,19 +140,50 @@
         this.$refs.taskModal.open();
       },
       confirmDelete(taskId) {
-        $.ajax({
-            url: "/tarefas-destroy", 
-            method: "DELETE",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
-            },
-            data: { id: taskId },
-            success: (response) => {
-              alert('atualizado');
-              window.location.href = '/home'; 
-            },
-            error: (error) => {
-              console.error("Erro ao atualizar:", error);
+        Swal.fire({
+            title: 'Tem certeza que deseja excluir esta tarefa?',
+            text: "Esta ação não pode ser desfeita!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+              
+                $.ajax({
+                    url: "/tarefas-destroy", 
+                    method: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: { id: taskId },
+                    success: (response) => {
+                      
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Tarefa excluída!',
+                            text: 'A tarefa foi excluída com sucesso.',
+                            showConfirmButton: true,
+                            timer: 1500
+                        });
+
+                        const table = $('#tableTarefas').DataTable();
+
+                        table.row(function(idx, data, node) {
+                            return data[0] == taskId;
+                        }).remove().draw();
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao excluir',
+                            text: 'Ocorreu um erro ao tentar excluir a tarefa. Tente novamente.',
+                            confirmButtonText: 'Ok'
+                        });
+                        console.error("Erro ao excluir:", error);
+                    }
+                });
             }
         });
       },

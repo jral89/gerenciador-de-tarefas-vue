@@ -51,8 +51,11 @@ class TaskController extends Controller
         if (isset($validated['categorias'])) {
             $task->categories()->sync($validated['categorias']);
         }
-    
-        return response()->json(['message' => 'Tarefa cadastrada com sucesso!']);
+        $task->load('categories');
+        return response()->json([
+            'message' => 'Tarefa cadastrada com sucesso!',
+            'task' => $task
+        ]);
     }
 
     public function show(string $id)
@@ -70,8 +73,12 @@ class TaskController extends Controller
         $task->save();
         
         $task->categories()->sync($request->input('categorias', []));
+        $task->load('categories');
 
-        return response()->json(['message' => 'Tarefa atualizada com sucesso!']);
+        return response()->json([
+            'message' => 'Tarefa atualizada com sucesso!',
+            'task' => $task
+        ]);
     }
 
     public function destroy(Request $request)
@@ -80,7 +87,11 @@ class TaskController extends Controller
     
         if ($task) {
             $task->delete();
-            return response()->json(['message' => 'Tarefa excluída com sucesso.']);
+            
+            return response()->json([
+                'message' => 'Tarefa excluida com sucesso!',
+                'task' => $task
+            ]);
         }
 
         return response()->json(['message' => 'Tarefa não encontrada.'], 404);
