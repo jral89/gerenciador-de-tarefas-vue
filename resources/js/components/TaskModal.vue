@@ -124,12 +124,44 @@
             },
             data: this.form,
             success: (response) => {
+
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Tarefa cadastrada!',
+                  text: 'A tarefa foi cadastrada com sucesso.',
+                  showConfirmButton: true,
+                  timer: 1500
+              });
+
               this.close();
               this.resetForm();
+              const task = response.task; 
               
+              $('#tableTarefas').DataTable().row.add([
+                  task.id, 
+                  task.title, 
+                  task.description, 
+                  task.status, 
+                  task.created_at, 
+                  task.updated_at, 
+                  task.categories.map(cat => cat.title).join(', '), 
+                  `
+                  <button class="btn btn-danger btn-sm" onclick="confirmDelete(${task.id})">
+                      <i class="bi bi-trash"></i>
+                  </button>
+                  <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})">
+                      <i class="bi bi-pencil-fill"></i>
+                  </button>
+                  `
+              ]).draw(false);
             },
             error: (error) => {
-              console.error("Erro ao carregar categorias:", error);
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Erro',
+                  text: 'Ocorreu um erro ao tentar cadastrar a tarefa. Tente novamente.',
+                  confirmButtonText: 'Ok'
+              });
             }
         });
       }, 
